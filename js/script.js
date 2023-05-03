@@ -10,10 +10,6 @@ let day;
 let month;
 let year;
 
-let currDay;
-let currMonth;
-let currYear;
-
 let errCount = 0;
 
 const presentDate = new Date();
@@ -24,9 +20,9 @@ currYear = presentDate.getUTCFullYear();
 
 const addErrors = (text) => {
 	let box = text.closest(".box");
-
 	box.querySelector(".label").classList.add("label--error");
 	box.querySelector(".input").classList.add("input--error");
+	
 	if (text.value == "") {
 		box.querySelector(".error-text").textContent = "This field is required";
 	} else {
@@ -38,31 +34,26 @@ const addErrors = (text) => {
 const fillCheck = (text) => {
 	const box = text.closest(".box");
 	const label = box.querySelector(".label");
-	const input = box.querySelector(".input");
 	const error = box.querySelector(".error-text");
-
+	
 	label.classList.remove("label--error");
-	input.classList.remove("input--error");
+	text.classList.remove("input--error");
 	error.style.visibility = "hidden";
-
+	
 	if (text.value == "") {
 		errCount++;
 		addErrors(text);
 	} else {
-		if (dateValidation(input) == false) {
+		if (dateValidation(text) == false) {
 			errCount++;
 			addErrors(text);
-			error.textContent = "This value is invalid";
 		}
 	}
 };
 
 const isPast = (day, month, year) => {
 	let givenDate = new Date(year, month - 1, day).getTime();
-	if (presentDate.getTime() < givenDate) {
-		return false;
-	}
-	return true;
+	return (presentDate.getTime() >= givenDate)
 };
 
 const dateValidation = (input) => {
@@ -95,29 +86,28 @@ const countTime = (day, month, year) => {
 	let birthday = `${month}.${day}.${year}`;
 	let birth = new Date(birthday);
 	birth.setFullYear(year); // if user passes in year between 0 and 99 it would be casted to 20th, now it works fine
-
+	
 	let ageDiffMill = presentDate - birth;
 	let ageDiffDate = new Date(ageDiffMill);
-
+	
 	yearsAmount.textContent = `${ageDiffDate.getFullYear() - 1970}`;
 	monthsAmount.textContent = `${ageDiffDate.getUTCMonth()}`;
 	daysAmount.textContent = `${ageDiffDate.getUTCDate()}`;
 };
 
 arrowBtn.addEventListener("click", () => {
-	let correctDate = false;
 	day = 0;
 	month = 0;
 	year = 0;
 	errCount = 0;
-
+	
 	inputs.forEach(function (item) {
 		fillCheck(item);
 	});
-
+	
 	if (errCount == 0) {
-		correctDate = isPast(day, month, year);
-		if (correctDate) {
+		
+		if (isPast(day, month, year)) {
 			countTime(day, month, year);
 		} else {
 			inputs.forEach(function(item) {
