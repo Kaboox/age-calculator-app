@@ -1,5 +1,13 @@
 const inputs = document.querySelectorAll("input");
 
+
+inputsArr = [];
+inputs.forEach(function(item) {
+	inputsArr.push(item)
+})
+inputsArr.reverse()
+
+console.log(inputsArr);
 const yearsAmount = document.querySelector(".years");
 const monthsAmount = document.querySelector(".months");
 const daysAmount = document.querySelector(".days");
@@ -19,11 +27,11 @@ currMonth = presentDate.getUTCMonth() + 1;
 currYear = presentDate.getUTCFullYear();
 
 // depending on input adds either empty error or invalid error
-const addErrors = (text) => { 
+const addErrors = (text) => {
 	let box = text.closest(".box");
 	box.querySelector(".label").classList.add("label--error");
 	box.querySelector(".input").classList.add("input--error");
-	
+
 	if (text.value == "") {
 		box.querySelector(".error-text").textContent = "This field is required";
 	} else {
@@ -36,11 +44,11 @@ const fillCheck = (text) => {
 	const box = text.closest(".box");
 	const label = box.querySelector(".label");
 	const error = box.querySelector(".error-text");
-	
+
 	label.classList.remove("label--error");
 	text.classList.remove("input--error");
 	error.style.visibility = "hidden";
-	
+
 	if (text.value == "") {
 		errCount++;
 		addErrors(text);
@@ -54,26 +62,40 @@ const fillCheck = (text) => {
 
 // checks if the given date is valid - past
 const isPast = (day, month, year) => {
+	console.log(month);
 	let givenDate = new Date(year, month - 1, day).getTime();
-	return (presentDate.getTime() >= givenDate)
+	return presentDate.getTime() >= givenDate;
 };
 
 // validates every input
 const dateValidation = (input) => {
 	if (input.id == "month") {
-		if (input.value > 12 || input.value <= 0 || input.value.toString().indexOf('.') != -1) {
+		monthString = input.value.toString();
+		if (
+			input.value > 12 || input.value <= 0 || monthString.indexOf(".") != -1
+		) {
 			return false;
 		}
 		month = input.value;
 		return true;
 	} else if (input.id == "year") {
-		if (input.value > presentDate.getFullYear() || input.value <= 0 || input.value.toString().indexOf('.') != -1) {
+		yearString = input.value.toString();
+		if (
+			input.value > presentDate.getFullYear() || input.value <= 0 || yearString.indexOf(".") != -1
+		) {
 			return false;
 		}
 		year = input.value;
 		return true;
 	} else if (input.id == "day") {
-		if (input.value > daysInMonth(month, year) || input.value <= 0 || input.value.toString().indexOf('.') != -1) {
+		dayString = input.value.toString();
+		console.log(year);
+		console.log(month);
+		if (
+			input.value > daysInMonth(month, year) ||
+			input.value <= 0 ||
+			dayString.indexOf(".") != -1
+		) {
 			return false;
 		}
 		day = input.value;
@@ -91,10 +113,10 @@ const countTime = (day, month, year) => {
 	let birthday = `${month}.${day}.${year}`;
 	let birth = new Date(birthday);
 	birth.setFullYear(year); // if user passes in year between 0 and 99 it would be casted to 20th, now it works fine
-	
+
 	let ageDiffMill = presentDate - birth;
 	let ageDiffDate = new Date(ageDiffMill);
-	
+
 	yearsAmount.textContent = `${ageDiffDate.getFullYear() - 1970}`;
 	monthsAmount.textContent = `${ageDiffDate.getUTCMonth()}`;
 	daysAmount.textContent = `${ageDiffDate.getUTCDate()}`;
@@ -105,28 +127,39 @@ const startApp = () => {
 	month = 0;
 	year = 0;
 	errCount = 0;
-	
-	inputs.forEach(function (item) {
+
+	inputsArr.forEach(function (item) {
 		fillCheck(item);
 	});
-	
+
+
+	inputsArr.forEach(function(item) {
+		if (item.classList.contains('input--error')) {
+			inputsArr.forEach(function(input) {
+				let box = input.closest('.box')
+				let label = box.querySelector('label')
+				input.classList.add('input--error')
+				label.classList.add('label--error')
+			})
+		}
+
+	})
+
 	if (errCount == 0) {
 		if (isPast(day, month, year)) {
 			countTime(day, month, year);
 		} else {
-			inputs.forEach(function(item) {
-				addErrors(item)
-			})
+			inputsArr.forEach(function (item) {
+				addErrors(item);
+			});
 		}
 	}
-
-}
-
+};
 
 const enterStart = () => {
 	if (event.keyCode === 13) {
-		startApp()
+		startApp();
 	}
-}
+};
 arrowBtn.addEventListener("click", startApp);
-document.addEventListener('keyup', enterStart)
+document.addEventListener("keyup", enterStart);
