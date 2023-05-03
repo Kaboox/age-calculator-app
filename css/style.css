@@ -42,6 +42,7 @@ main .top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  width: 100%;
   margin-top: 1em;
   padding: 1em 0;
 }
@@ -89,8 +90,8 @@ main .line {
   position: relative;
   height: 1px;
   width: 100%;
-  background-color: #cbc9c9;
   margin-bottom: 3em;
+  background-color: #cbc9c9;
 }
 main .line .circle {
   position: absolute;
@@ -134,13 +135,14 @@ main .bottom p span {
 }
 @media (min-width: 768px) {
   main .top {
+    width: 70%;
     font-size: 1rem;
   }
   main .top .box input {
     font-size: 1.6rem;
   }
   main .line {
-    margin-top: 5em;
+    margin-top: 0.5em;
   }
   main .line .circle {
     width: 100px;
