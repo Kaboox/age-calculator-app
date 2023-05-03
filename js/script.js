@@ -70,7 +70,7 @@ const dateValidation = (input) => {
 		month = input.value;
 		return true;
 	} else if (input.id == "year") {
-		if (input.value > presentDate.getFullYear() || input.value <= 99) {
+		if (input.value > presentDate.getFullYear() || input.value <= 0) {
 			return false;
 		}
 		year = input.value;
@@ -91,10 +91,12 @@ const daysInMonth = (month, year) => {
 const countTime = (day, month, year) => {
 	let birthday = `${month}.${day}.${year}`;
 	let birth = new Date(birthday);
-
+	birth.setFullYear(year) // if user passes in year between 0 and 99 it would be casted to 20th
+	
 	let ageDiffMill = presentDate - birth;
 	let ageDiffDate = new Date(ageDiffMill);
-	yearsAmount.textContent = `${ageDiffDate.getUTCFullYear() - 1970}`;
+	
+	yearsAmount.textContent = `${ageDiffDate.getFullYear() - 1970}`;
 	monthsAmount.textContent = `${ageDiffDate.getUTCMonth()}`;
 	daysAmount.textContent = `${ageDiffDate.getUTCDate()}`;
 };
@@ -108,7 +110,6 @@ arrowBtn.addEventListener("click", () => {
 	fillCheck(monthInput);
 	fillCheck(yearInput);
 	fillCheck(dayInput);
-	console.log(errCount);
 
 	if (errCount == 0) {
 		correctDate = isPast(day, month, year);
