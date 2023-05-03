@@ -100,7 +100,7 @@ const countTime = (day, month, year) => {
 	daysAmount.textContent = `${ageDiffDate.getUTCDate()}`;
 };
 
-arrowBtn.addEventListener("click", () => {
+const startApp = () => {
 	day = 0;
 	month = 0;
 	year = 0;
@@ -120,4 +120,13 @@ arrowBtn.addEventListener("click", () => {
 		}
 	}
 
-});
+}
+
+
+const enterStart = () => {
+	if (event.keyCode === 13) {
+		startApp()
+	}
+}
+arrowBtn.addEventListener("click", startApp);
+document.addEventListener('keyup', enterStart)
