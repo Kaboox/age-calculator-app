@@ -1,6 +1,4 @@
-const dayInput = document.querySelector("#day");
-const monthInput = document.querySelector("#month");
-const yearInput = document.querySelector("#year");
+const inputs = document.querySelectorAll("input");
 
 const yearsAmount = document.querySelector(".years");
 const monthsAmount = document.querySelector(".months");
@@ -16,7 +14,6 @@ let currDay;
 let currMonth;
 let currYear;
 
-
 let errCount = 0;
 
 const presentDate = new Date();
@@ -25,10 +22,16 @@ currDay = presentDate.getUTCDay();
 currMonth = presentDate.getUTCMonth() + 1;
 currYear = presentDate.getUTCFullYear();
 
-const addErrors = (box) => {
+const addErrors = (text) => {
+	let box = text.closest(".box");
+
 	box.querySelector(".label").classList.add("label--error");
 	box.querySelector(".input").classList.add("input--error");
-	box.querySelector(".error-text").textContent = "This field is required";
+	if (text.value == "") {
+		box.querySelector(".error-text").textContent = "This field is required";
+	} else {
+		box.querySelector(".error-text").textContent = "This field is invalid";
+	}
 	box.querySelector(".error-text").style.visibility = "visible";
 };
 
@@ -44,11 +47,11 @@ const fillCheck = (text) => {
 
 	if (text.value == "") {
 		errCount++;
-		addErrors(box);
+		addErrors(text);
 	} else {
 		if (dateValidation(input) == false) {
 			errCount++;
-			addErrors(box);
+			addErrors(text);
 			error.textContent = "This value is invalid";
 		}
 	}
@@ -91,11 +94,11 @@ const daysInMonth = (month, year) => {
 const countTime = (day, month, year) => {
 	let birthday = `${month}.${day}.${year}`;
 	let birth = new Date(birthday);
-	birth.setFullYear(year) // if user passes in year between 0 and 99 it would be casted to 20th
-	
+	birth.setFullYear(year); // if user passes in year between 0 and 99 it would be casted to 20th, now it works fine
+
 	let ageDiffMill = presentDate - birth;
 	let ageDiffDate = new Date(ageDiffMill);
-	
+
 	yearsAmount.textContent = `${ageDiffDate.getFullYear() - 1970}`;
 	monthsAmount.textContent = `${ageDiffDate.getUTCMonth()}`;
 	daysAmount.textContent = `${ageDiffDate.getUTCDate()}`;
@@ -107,15 +110,20 @@ arrowBtn.addEventListener("click", () => {
 	month = 0;
 	year = 0;
 	errCount = 0;
-	fillCheck(monthInput);
-	fillCheck(yearInput);
-	fillCheck(dayInput);
+
+	inputs.forEach(function (item) {
+		fillCheck(item);
+	});
 
 	if (errCount == 0) {
 		correctDate = isPast(day, month, year);
+		if (correctDate) {
+			countTime(day, month, year);
+		} else {
+			inputs.forEach(function(item) {
+				addErrors(item)
+			})
+		}
 	}
 
-	if (correctDate) {
-		countTime(day, month, year);
-	}
 });
