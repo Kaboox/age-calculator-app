@@ -1,13 +1,13 @@
 const inputs = document.querySelectorAll("input");
 
-
+// reversing array, so we can check days in month, after having year and month
 inputsArr = [];
-inputs.forEach(function(item) {
-	inputsArr.push(item)
-})
-inputsArr.reverse()
+inputs.forEach(function (item) {
+	inputsArr.push(item);
+});
+inputsArr.reverse();
 
-console.log(inputsArr);
+
 const yearsAmount = document.querySelector(".years");
 const monthsAmount = document.querySelector(".months");
 const daysAmount = document.querySelector(".days");
@@ -62,7 +62,6 @@ const fillCheck = (text) => {
 
 // checks if the given date is valid - past
 const isPast = (day, month, year) => {
-	console.log(month);
 	let givenDate = new Date(year, month - 1, day).getTime();
 	return presentDate.getTime() >= givenDate;
 };
@@ -72,7 +71,9 @@ const dateValidation = (input) => {
 	if (input.id == "month") {
 		monthString = input.value.toString();
 		if (
-			input.value > 12 || input.value <= 0 || monthString.indexOf(".") != -1
+			input.value > 12 ||
+			input.value <= 0 ||
+			monthString.indexOf(".") != -1
 		) {
 			return false;
 		}
@@ -81,7 +82,9 @@ const dateValidation = (input) => {
 	} else if (input.id == "year") {
 		yearString = input.value.toString();
 		if (
-			input.value > presentDate.getFullYear() || input.value <= 0 || yearString.indexOf(".") != -1
+			input.value > presentDate.getFullYear() ||
+			input.value <= 0 ||
+			yearString.indexOf(".") != -1
 		) {
 			return false;
 		}
@@ -89,8 +92,6 @@ const dateValidation = (input) => {
 		return true;
 	} else if (input.id == "day") {
 		dayString = input.value.toString();
-		console.log(year);
-		console.log(month);
 		if (
 			input.value > daysInMonth(month, year) ||
 			input.value <= 0 ||
@@ -119,7 +120,7 @@ const countTime = (day, month, year) => {
 
 	yearsAmount.textContent = `${ageDiffDate.getFullYear() - 1970}`;
 	monthsAmount.textContent = `${ageDiffDate.getUTCMonth()}`;
-	daysAmount.textContent = `${ageDiffDate.getUTCDate()}`;
+	daysAmount.textContent = `${ageDiffDate.getUTCDate()-1}`;
 };
 
 const startApp = () => {
@@ -133,17 +134,21 @@ const startApp = () => {
 	});
 
 
-	inputsArr.forEach(function(item) {
-		if (item.classList.contains('input--error')) {
-			inputsArr.forEach(function(input) {
-				let box = input.closest('.box')
-				let label = box.querySelector('label')
-				input.classList.add('input--error')
-				label.classList.add('label--error')
-			})
+	// checks if atleast 1 element has error and applies error to others aswell - just the colors
+	inputsArr.forEach(function (item) {
+		let err = 0;
+		if (item.classList.contains("input--error")) {
+			err++;
 		}
-
-	})
+		if (err > 0) {
+			inputsArr.forEach(function (input) {
+				let box = input.closest(".box");
+				let label = box.querySelector("label");
+				input.classList.add("input--error");
+				label.classList.add("label--error");
+			});
+		}
+	});
 
 	if (errCount == 0) {
 		if (isPast(day, month, year)) {
