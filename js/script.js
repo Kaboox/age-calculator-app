@@ -18,7 +18,8 @@ currDay = presentDate.getUTCDay();
 currMonth = presentDate.getUTCMonth() + 1;
 currYear = presentDate.getUTCFullYear();
 
-const addErrors = (text) => {
+// depending on input adds either empty error or invalid error
+const addErrors = (text) => { 
 	let box = text.closest(".box");
 	box.querySelector(".label").classList.add("label--error");
 	box.querySelector(".input").classList.add("input--error");
@@ -51,11 +52,13 @@ const fillCheck = (text) => {
 	}
 };
 
+// checks if the given date is valid - past
 const isPast = (day, month, year) => {
 	let givenDate = new Date(year, month - 1, day).getTime();
 	return (presentDate.getTime() >= givenDate)
 };
 
+// validates every input
 const dateValidation = (input) => {
 	if (input.id == "month") {
 		if (input.value > 12 || input.value <= 0) {
@@ -78,10 +81,12 @@ const dateValidation = (input) => {
 	}
 };
 
+// checks how many days are there in given month
 const daysInMonth = (month, year) => {
 	return new Date(year, month, 0).getDate();
 };
 
+// counts date difference and applies it to html
 const countTime = (day, month, year) => {
 	let birthday = `${month}.${day}.${year}`;
 	let birth = new Date(birthday);
@@ -106,7 +111,6 @@ arrowBtn.addEventListener("click", () => {
 	});
 	
 	if (errCount == 0) {
-		
 		if (isPast(day, month, year)) {
 			countTime(day, month, year);
 		} else {
