@@ -70,7 +70,7 @@ const dateValidation = (input) => {
 		month = input.value;
 		return true;
 	} else if (input.id == "year") {
-		if (input.value > presentDate.getFullYear() || input.value <= 0) {
+		if (input.value > presentDate.getFullYear() || input.value <= 99) {
 			return false;
 		}
 		year = input.value;
