@@ -61,19 +61,19 @@ const isPast = (day, month, year) => {
 // validates every input
 const dateValidation = (input) => {
 	if (input.id == "month") {
-		if (input.value > 12 || input.value <= 0) {
+		if (input.value > 12 || input.value <= 0 || input.value.toString().indexOf('.') != -1) {
 			return false;
 		}
 		month = input.value;
 		return true;
 	} else if (input.id == "year") {
-		if (input.value > presentDate.getFullYear() || input.value <= 0) {
+		if (input.value > presentDate.getFullYear() || input.value <= 0 || input.value.toString().indexOf('.') != -1) {
 			return false;
 		}
 		year = input.value;
 		return true;
 	} else if (input.id == "day") {
-		if (input.value > daysInMonth(month, year) || input.value <= 0) {
+		if (input.value > daysInMonth(month, year) || input.value <= 0 || input.value.toString().indexOf('.') != -1) {
 			return false;
 		}
 		day = input.value;
