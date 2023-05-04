@@ -166,5 +166,14 @@ const enterStart = () => {
 		startApp();
 	}
 };
+
+inputsArr.forEach(function(item) {
+	item.addEventListener('keyup', e => {
+		if (e.keyCode === 69) {
+			errCount++;
+		}
+	})
+})
+
 arrowBtn.addEventListener("click", startApp);
 document.addEventListener("keyup", enterStart);
