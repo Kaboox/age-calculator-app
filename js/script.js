@@ -111,7 +111,7 @@ const daysInMonth = (month, year) => {
 
 // counts date difference and applies it to html
 const countTime = (day, month, year) => {
-	let birthday = `${month}.${day}.${year}`;
+	let birthday = `${month}/${day}/${year}`;
 	let birth = new Date(birthday);
 	birth.setFullYear(year); // if user passes in year between 0 and 99 it would be casted to 20th, now it works fine
 
